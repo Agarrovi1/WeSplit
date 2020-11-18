@@ -15,6 +15,17 @@ struct CheckSharing: View {
     
     let tipPercentages = [10,15,20,25,0]
     
+    private var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        let tipSelection = Double(tipPercentages[tipPercentage])
+        let orderAmount = Double(checkAmount) ?? 0
+        
+        let tipAmount = orderAmount / 100 * tipSelection
+        let grandTotal = orderAmount + tipAmount
+        let amountPerPerson = grandTotal / peopleCount
+        return amountPerPerson
+    }
+    
     var body: some View {
         NavigationView {
             Form {
@@ -27,7 +38,6 @@ struct CheckSharing: View {
                         }
                     }
                 }
-                
                 Section(header: Text("How much tip do you want to leave?")) {
                     Picker("Tip Percentage", selection: $tipPercentage) {
                         ForEach(0..<tipPercentages.count) {
@@ -37,8 +47,8 @@ struct CheckSharing: View {
                     .pickerStyle(SegmentedPickerStyle())
                 }
                 
-                Section {
-                    Text("$\(checkAmount)")
+                Section(header: Text("Each person pays:")) {
+                    Text("$\(totalPerPerson, specifier: "%.2f")")
                 }
             .navigationBarTitle("WeSpit")
             }
