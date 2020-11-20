@@ -25,6 +25,16 @@ struct CheckSharing: View {
         let amountPerPerson = grandTotal / peopleCount
         return amountPerPerson
     }
+    private var grandTotal: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        let tipSelection = Double(tipPercentages[tipPercentage])
+        let orderAmount = Double(checkAmount) ?? 0
+        
+        let tipAmount = orderAmount / 100 * tipSelection
+        let grandTotal = orderAmount + tipAmount
+        
+        return grandTotal
+    }
     
     var body: some View {
         NavigationView {
@@ -45,6 +55,11 @@ struct CheckSharing: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                Section {
+                    
+                    Text("Grand Total: $\(grandTotal, specifier: "%.2f")")
                 }
                 
                 Section(header: Text("Each person pays:")) {
