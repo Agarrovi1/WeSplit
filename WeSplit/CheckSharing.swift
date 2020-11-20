@@ -26,14 +26,17 @@ struct CheckSharing: View {
         return amountPerPerson
     }
     private var grandTotal: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+        let tipSelection = Double(tipPercentages[tipPercentage])
+        let orderAmount = Double(checkAmount) ?? 0
+        let tipAmount = orderAmount / 100 * tipSelection
+        
+        return orderAmount + tipAmount
+    }
+    private var tipAmount: Double {
         let tipSelection = Double(tipPercentages[tipPercentage])
         let orderAmount = Double(checkAmount) ?? 0
         
-        let tipAmount = orderAmount / 100 * tipSelection
-        let grandTotal = orderAmount + tipAmount
-        
-        return grandTotal
+        return orderAmount / 100 * tipSelection
     }
     
     var body: some View {
@@ -58,7 +61,7 @@ struct CheckSharing: View {
                 }
                 
                 Section {
-                    
+                    Text("Amount For tip: $\(tipAmount, specifier: "%.2f")")
                     Text("Grand Total: $\(grandTotal, specifier: "%.2f")")
                 }
                 
